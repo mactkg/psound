@@ -1,11 +1,16 @@
+import java.lang.reflect.Method;
+
 class Button {
   String name;
   int x, y, w, h;
   color background, pressed, stroke;
   boolean isPressed;
   PFont font;
+  PApplet _parent;
+  private Method onEventMethod;
   
-  Button(String _name, int _x, int _y, int _w, int _h) {
+  Button(PApplet app, String _name, int _x, int _y, int _w, int _h) {
+    _parent = app;
     name = _name;
     x = _x;
     y = _y;
@@ -17,6 +22,13 @@ class Button {
     stroke     = color(255);
     
     font = loadFont("font.vlw");
+    
+    onEventMethod = getMethodRef(_parent, "onButtonEvent", new Class[] {
+      String.class, // name
+      int.class,    // mouseX
+      int.class,    // mouseY
+      boolean.class // pressed?
+    });
   }
   
   void draw() {
@@ -42,12 +54,33 @@ class Button {
   void mousePressed(int mx, int my) {
     if(isInside(mx, my)) {
       isPressed = true;
+      try {
+        onEventMethod.invoke( _parent, new Object[] { 
+          (String)name,
+          (int)mx,
+          (int)my,
+          (boolean)isPressed
+        } 
+        );
+      } 
+      catch (Exception e) {
+      }
     }
   }
   
   void mouseReleased(int mx, int my) {
     if(isInside(mx, my)) {
-    
+      try {
+        onEventMethod.invoke( _parent, new Object[] { 
+          (String)name,
+          (int)mx,
+          (int)my,
+          (boolean)isPressed
+        } 
+        );
+      } 
+      catch (Exception e) {
+      }
     }
     isPressed = false;
   }
@@ -58,4 +91,16 @@ class Button {
     }  
     return false;
   }
+  
+  // code from https://github.com/kougaku/OculusRiftP5/blob/master/OculusRift_BasicExample/OculusRift.pde#L210-L218
+  private Method getMethodRef(Object obj, String methodName, Class[] paraList) {
+    Method ret = null;
+    try {
+      ret = obj.getClass().getMethod(methodName, paraList);
+    }
+    catch (Exception e) {
+    }
+    return ret;
+  }
+
 }

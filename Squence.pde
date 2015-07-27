@@ -33,28 +33,32 @@ class Sequence extends Thread {
       double ms = millis();
       if(ms - lastUpdateMs > beatMs/2) {
         lastUpdateMs = ms;
-        //brabrabra...
+        count = (count+1)%freqs.length;
+        
         try {
           sound.setFrequency(getCurrentFreq(count));
         } catch(Exception e) {
           println(e);
         }
         println(beatMs);
-        
-        count = (count+1)%freqs.length;
       }
     }
   }
   
-  void draw() {
-    sound.draw();
+  void draw(float x, float y, float w, float h) {
+    sound.draw(x, y, w, h);
   }
 
   void setSound(Sound s) {
     sound = s;
   }
+ 
+  void setBPM(float _bpm) {
+    bpm = _bpm;
+    beatMs = int(60.0/bpm*1000);
+  }
 
-  float[] appliedFreqs(Sn sn) {
+  float[] getAppliedFreqs(Sn sn) {
     float[] data = new float[freqs.length];
 
     for (int i = 0; i < sn.x.length; i++) {
@@ -64,13 +68,12 @@ class Sequence extends Thread {
     return data;
   }
 
-  float getCurrentFreq(int tick) {
-    return appliedFreqs(converter)[tick%freqs.length];
+  float[] getCurrentFreqs() {
+    return getAppliedFreqs(converter);
   }
-  
-  void setBPM(float _bpm) {
-    bpm = _bpm;
-    beatMs = int(60.0/bpm*1000);
+
+  float getCurrentFreq(int tick) {
+    return getAppliedFreqs(converter)[tick%freqs.length];
   }
 }
 

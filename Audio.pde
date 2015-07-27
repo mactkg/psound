@@ -15,15 +15,27 @@ class Sound {
     right = out.right;
   }
   
-  void draw() {
+  void draw(float x, float y, float w, float h) {
+    pushMatrix();
+    pushStyle();
+    
+    stroke(255);
     for( int i = 0; i < out.bufferSize() - 1; i++ )
     {
-      float x1 = map( i, 0, out.bufferSize(), 0, width );
-      float x2 = map( i+1, 0, out.bufferSize(), 0, width  );
+      float x1 = map( i, 0, out.bufferSize(), 0, w );
+      float x2 = map( i+1, 0, out.bufferSize(), 0, w  );
+      float yy = h/4;
   
-      line( x1, 50 + out.left.get(i)*50, x2, 50 + out.left.get(i+1)*50);
-      line( x1, 150 + out.right.get(i)*50, x2, 150 + out.right.get(i+1)*50);
+      line( x1, yy + out.left.get(i)*yy, x2, yy + out.left.get(i+1)*yy);
+      line( x1, 3*yy + out.right.get(i)*yy, x2, 3*yy + out.right.get(i+1)*yy);
     }
+    
+    noFill();
+    stroke(255);
+    rect(x, y, w-1, h-1);
+    
+    popStyle();
+    popMatrix();
   }
   
   void setFrequency(float freq) throws Exception {

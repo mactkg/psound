@@ -13,11 +13,13 @@ Sn quarterSwitch;
 int current = 0;
 boolean willChange = false;
 
+Knob moogFreqKnob;
+Knob moogRezKnob;
+
 void setup() {
   //
   // Sn HACK
   //
-  
   int[] b = {0, 1, 2, 3, 4, 5, 6, 7};
   int[] c = {7, 0, 1, 2, 3, 4, 5, 6};
   int[] hs = {4, 5, 6, 7, 0, 1, 2, 3};
@@ -53,7 +55,7 @@ void setup() {
   float[] test = {55, 220, 82.4, 0, 110, 55, 82.4, 0};
   seq = new Sequence(test);
   seq.setSn(mm.get(0));
-  seq.setBPM(120);
+  seq.setBPM(60);
 
   //
   // Sound
@@ -69,24 +71,31 @@ void setup() {
   permutator = new Permutator(mm, seq);
   
   //
+  // Knob
+  //
+  moogFreqKnob = new Knob("Freq", 1000, 0, 10000);
+  moogRezKnob = new Knob("Rez", 0.2, 0, 1);
+  
+  //
   // P5
   //
   size(1200, 800);
   background(255);
 }
 
-void draw() {  
-  float freq = constrain( map( mouseX, 0, width, 200, 12000 ), 200, 12000 );
-  float rez  = constrain( map( mouseY, height, 0, 0, 1 ), 0, 1 );
-  
-  sound.setMoogFrequency(freq);
-  sound.setMoogResonance(rez);
+void draw() {    
+  sound.setMoogFrequency(moogFreqKnob.value);
+  sound.setMoogResonance(moogRezKnob.value);
   
   // visualize
   background(0);
   stroke(255);
 
-  seq.draw();
+  seq.draw(0, 0, width, 200);
+  permutator.draw(50, 250, 400, 200);
+  
+  moogFreqKnob.draw(700, 300, 80);
+  moogRezKnob.draw(800, 300, 80);
 }
 
 void keyPressed() {
@@ -95,4 +104,18 @@ void keyPressed() {
   } else if(keyCode == LEFT) {
     permutator.previous();
   }
+}
+
+void mousePressed() {
+  moogFreqKnob.mousePressed(mouseX, mouseY);
+  moogRezKnob.mousePressed(mouseX, mouseY);
+}
+
+void mouseReleased() {
+  moogFreqKnob.mouseReleased(mouseX, mouseY);
+  moogRezKnob.mouseReleased(mouseX, mouseY);
+}
+
+void onButtonEvent(String name, int mx, int my, boolean isPressed) {
+  println(name, mx, my, isPressed);
 }
