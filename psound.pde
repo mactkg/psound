@@ -37,6 +37,7 @@ void setup() {
   quarterSwitch = new Sn(8, qs);
   
   ArrayList<Sn> mm=new ArrayList<Sn>();
+  mm.add(base);
   mm.add(prod(base, circulate));
   mm.add(prod(base, halfSwitch));
   mm.add(prod(base, quarterSwitch));
@@ -112,6 +113,7 @@ void draw() {
 
   seq.draw(0, 0, width, 200);
   permutator.draw(50, 250, 400, 200);
+  permutator.drawCurrentPermutations(510, 580);
   
   volumeKnob.draw(550, 300, 80);
   bpmKnob.draw(700, 300, 80);

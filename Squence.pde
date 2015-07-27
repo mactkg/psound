@@ -15,7 +15,7 @@ class Sequence extends Thread {
     int[] d = {
       0, 1, 2, 3, 4, 5, 6, 7
     };
-    converter = new Sn(16, d);
+    //converter = new Sn(8, d);
     setBPM(120);
     
     thread("loop");
@@ -44,7 +44,7 @@ class Sequence extends Thread {
         } catch(Exception e) {
           println(e);
         }
-        println(beatMs);
+        //println(beatMs);
       }
     }
   }
@@ -75,7 +75,7 @@ class Sequence extends Thread {
     for (int i = 0; i < sn.x.length; i++) {
       data[sn.x[i]] = freqs[i];
     }
-
+    
     return data;
   }
 

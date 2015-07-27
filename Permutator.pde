@@ -14,8 +14,8 @@ class Permutator {
   }
   
   void next() {
-    seq.setSn(permutations.get(current));
     current = (current+1)%permutations.size();
+    seq.setSn(permutations.get(current));
   }
   
   void draw(int x, int y, int w, int h) {
@@ -72,17 +72,24 @@ class Permutator {
     pushMatrix();
     pushStyle();
     
+    // title
     translate(x, y);
+    textSize(18);
+    text("Current Permutation", 0, 0);
     
+    // permutation
+    translate(15, 40);
+    textSize(30);
     Sn cp = permutations.get(current);
     
     for(int i = 0; i < cp.x.length; i++) {
-      text(i, i*10, 0);
-      text(i, cp.x[i]*10, 20);
+      text(i, i*25, 0);
+      line(i*25 + 10, 10, cp.x[i]*25 + 10, 50);
+      text(i, cp.x[i]*25, 80);
     }
     
-    pushStyle();
-    pushMatrix();
+    popStyle();
+    popMatrix();
   }
 
   void setBPM(float bpm) {
