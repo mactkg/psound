@@ -15,6 +15,12 @@ boolean willChange = false;
 
 Knob moogFreqKnob;
 Knob moogRezKnob;
+Knob bpmKnob;
+Knob volumeKnob;
+
+Button startButton;
+Button stopButton;
+ToggleButton muteToggleButton;
 
 void setup() {
   //
@@ -73,8 +79,17 @@ void setup() {
   //
   // Knob
   //
-  moogFreqKnob = new Knob("Freq", 1000, 0, 10000);
-  moogRezKnob = new Knob("Rez", 0.2, 0, 1);
+  moogFreqKnob = new Knob("Freq", 2000, 0, 10000);
+  moogRezKnob = new Knob("Rez", 0.9, 0, 1);
+  bpmKnob = new Knob("BPM", 120, 0, 300);
+  volumeKnob = new Knob("Volume", 1, 0, 1);
+  
+  //
+  // Button
+  //
+  startButton = new Button(this, "Start", 50, 660, 100, 60);
+  stopButton = new Button(this, "Stop", 180, 660, 100, 60);
+  muteToggleButton = new ToggleButton(this, "Mute", false, 310, 660, 100, 60);
   
   //
   // P5
@@ -86,6 +101,10 @@ void setup() {
 void draw() {    
   sound.setMoogFrequency(moogFreqKnob.value);
   sound.setMoogResonance(moogRezKnob.value);
+  permutator.setBPM(bpmKnob.value);
+  if(!muteToggleButton.value) {
+    permutator.setAmplitude(volumeKnob.value);
+  }
   
   // visualize
   background(0);
@@ -94,8 +113,13 @@ void draw() {
   seq.draw(0, 0, width, 200);
   permutator.draw(50, 250, 400, 200);
   
-  moogFreqKnob.draw(700, 300, 80);
-  moogRezKnob.draw(800, 300, 80);
+  volumeKnob.draw(550, 300, 80);
+  bpmKnob.draw(700, 300, 80);
+  moogFreqKnob.draw(550, 450, 80);
+  moogRezKnob.draw(700, 450, 80);
+  startButton.draw();
+  stopButton.draw();
+  muteToggleButton.draw();
 }
 
 void keyPressed() {
@@ -109,13 +133,37 @@ void keyPressed() {
 void mousePressed() {
   moogFreqKnob.mousePressed(mouseX, mouseY);
   moogRezKnob.mousePressed(mouseX, mouseY);
+  bpmKnob.mousePressed(mouseX, mouseY);
+  volumeKnob.mousePressed(mouseX, mouseY);
+  startButton.mousePressed(mouseX, mouseY);
+  stopButton.mousePressed(mouseX, mouseY);
+  muteToggleButton.mousePressed(mouseX, mouseY);
 }
 
 void mouseReleased() {
   moogFreqKnob.mouseReleased(mouseX, mouseY);
   moogRezKnob.mouseReleased(mouseX, mouseY);
+  bpmKnob.mouseReleased(mouseX, mouseY);
+  volumeKnob.mouseReleased(mouseX, mouseY);
+  startButton.mouseReleased(mouseX, mouseY);
+  stopButton.mouseReleased(mouseX, mouseY);
+  muteToggleButton.mouseReleased(mouseX, mouseY);
 }
 
 void onButtonEvent(String name, int mx, int my, boolean isPressed) {
-  println(name, mx, my, isPressed);
+
+  if(name == "Start") {
+    permutator.startSeq();
+  } else if(name == "Stop") {
+    permutator.stopSeq();
+  } else if(name == "Mute") {
+    
+    if(muteToggleButton.value) {
+      permutator.mute();
+    } else {
+      permutator.unmute();
+    }
+    
+  }
+  
 }

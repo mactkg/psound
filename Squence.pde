@@ -7,8 +7,10 @@ class Sequence extends Thread {
   float bpm;
   int beatMs;
   double lastUpdateMs;
+  boolean isWorking;
 
   Sequence(float[] f) {
+    isWorking = true;
     freqs = f;
     int[] d = {
       0, 1, 2, 3, 4, 5, 6, 7
@@ -33,7 +35,9 @@ class Sequence extends Thread {
       double ms = millis();
       if(ms - lastUpdateMs > beatMs/2) {
         lastUpdateMs = ms;
-        count = (count+1)%freqs.length;
+        if(isWorking) {
+          count = (count+1)%freqs.length;
+        }
         
         try {
           sound.setFrequency(getCurrentFreq(count));
@@ -57,6 +61,13 @@ class Sequence extends Thread {
     bpm = _bpm;
     beatMs = int(60.0/bpm*1000);
   }
+  
+  void setAmplitude(float amp) {
+    try{
+      sound.setAmplitude(amp);
+    } catch(Exception e){
+    }
+  }
 
   float[] getAppliedFreqs(Sn sn) {
     float[] data = new float[freqs.length];
@@ -74,6 +85,28 @@ class Sequence extends Thread {
 
   float getCurrentFreq(int tick) {
     return getAppliedFreqs(converter)[tick%freqs.length];
+  }
+  
+  void unmute() {
+    try{
+      sound.unmute();
+    } catch(Exception e) {
+    }
+  }
+  
+  void mute() {
+    try{
+      sound.mute();
+    } catch(Exception e) {
+    }
+  }
+  
+  void stopSeq() {
+    isWorking = false;
+  }
+  
+  void startSeq() {
+    isWorking = true;
   }
 }
 

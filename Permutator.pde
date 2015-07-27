@@ -84,12 +84,28 @@ class Permutator {
     pushStyle();
     pushMatrix();
   }
-  
-  void getHeight() {
-    
+
+  void setBPM(float bpm) {
+    seq.setBPM(bpm);
   }
   
-  void getWidth() {
-    
+  void setAmplitude(float amp) {
+    seq.setAmplitude(amp);
+  }
+  
+  void unmute() {
+    seq.unmute();
+  }
+  
+  void mute() {
+    seq.mute();
+  }
+  
+  void startSeq() {
+    seq.startSeq();
+  }
+  
+  void stopSeq() {
+    seq.stopSeq();
   }
 }

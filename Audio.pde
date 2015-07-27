@@ -45,6 +45,18 @@ class Sound {
   int bufferSize() {
     return out.bufferSize();
   }
+  
+  void mute() throws Exception {
+    throw new Exception("Please impl here");
+  }
+  
+  void unmute() throws Exception {
+    throw new Exception("Please impl here");
+  }
+  
+  void setAmplitude(float amp)throws Exception  {
+    throw new Exception("Please impl here");
+  }
 }
 
 
@@ -74,15 +86,15 @@ class AcidBass extends Sound {
     osc.setFrequency(freq);
   }
   
-  void setAmplitude(int amp) {
+  void setAmplitude(float amp) {
     osc.setAmplitude(amp);
   }
   
-  void stop() {
+  void mute() {
     osc.setAmplitude(0);
   }
   
-  void start() {
+  void unmute() {
     osc.setAmplitude(1);
   }
 }
