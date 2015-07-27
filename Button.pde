@@ -67,6 +67,7 @@ class Button {
   }
   
   void mouseReleased(int mx, int my) {
+    isPressed = false;
     if(isInside(mx, my)) {
       try {
         onEventMethod.invoke( _parent, new Object[] { 
@@ -80,7 +81,6 @@ class Button {
       catch (Exception e) {
       }
     }
-    isPressed = false;
   }
   
   boolean isInside(int mx, int my) {

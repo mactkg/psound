@@ -115,4 +115,8 @@ class Permutator {
   void stopSeq() {
     seq.stopSeq();
   }
+  
+  void setFrequences(float[] freqs) {
+    seq.setFrequences(freqs);
+  }
 }

@@ -11,6 +11,7 @@ Sn halfSwitch;
 Sn quarterSwitch;
 
 int current = 0;
+int currentPattern = 0;
 boolean willChange = false;
 
 Knob moogFreqKnob;
@@ -20,7 +21,17 @@ Knob volumeKnob;
 
 Button startButton;
 Button stopButton;
+Button nextButton;
+Button prevButton;
+Button nextPatternButton;
+Button prevPatternButton;
 ToggleButton muteToggleButton;
+
+float[][] patterns = {
+  {193.7, 261.6, 329.6, 349.2, 392.0, 440.0, 493.9, 523.3},
+  {55, 220, 82.4, 0, 110, 55, 82.4, 0},
+  {100, 320, 180, 100, 280, 100, 180, 230},
+};
 
 void setup() {
   //
@@ -57,10 +68,7 @@ void setup() {
   //
   // Sequence
   //
-  //float[] test = {100, 320, 180, 100, 280, 100, 180, 230};
-  //float[] test = {261.6, 193.7, 329.6, 349.2, 392.0, 440.0, 493.9, 523.3};
-  float[] test = {55, 220, 82.4, 0, 110, 55, 82.4, 0};
-  seq = new Sequence(test);
+  seq = new Sequence(patterns[0]);
   seq.setSn(mm.get(0));
   seq.setBPM(60);
 
@@ -90,12 +98,16 @@ void setup() {
   //
   startButton = new Button(this, "Start", 50, 660, 100, 60);
   stopButton = new Button(this, "Stop", 180, 660, 100, 60);
+  nextButton = new Button(this, "→", 415, 245, 30, 30);
+  prevButton = new Button(this, "←", 50, 245, 30, 30);
+  nextPatternButton = new Button(this, "Next", 650, 720, 120, 40);
+  prevPatternButton = new Button(this, "Previous", 520, 720, 120, 40);
   muteToggleButton = new ToggleButton(this, "Mute", false, 310, 660, 100, 60);
   
   //
   // P5
   //
-  size(1200, 800);
+  size(800, 800);
   background(255);
 }
 
@@ -110,15 +122,25 @@ void draw() {
   // visualize
   background(0);
   stroke(255);
-
   seq.draw(0, 0, width, 200);
-  permutator.draw(50, 250, 400, 200);
-  permutator.drawCurrentPermutations(510, 580);
-  
+
+  // right side
+  permutator.drawCurrentPermutations(510, 540);
   volumeKnob.draw(550, 300, 80);
   bpmKnob.draw(700, 300, 80);
-  moogFreqKnob.draw(550, 450, 80);
-  moogRezKnob.draw(700, 450, 80);
+  moogFreqKnob.draw(550, 430, 80);
+  moogRezKnob.draw(700, 430, 80);
+  
+  textSize(18);
+  text("Change Sound Pattern", 510, 700);
+  prevPatternButton.draw();
+  nextPatternButton.draw();
+  
+  // left side
+  prevButton.draw();
+  nextButton.draw();
+  translate(0, 40);
+  permutator.draw(50, 250, 400, 200);
   startButton.draw();
   stopButton.draw();
   muteToggleButton.draw();
@@ -140,6 +162,10 @@ void mousePressed() {
   startButton.mousePressed(mouseX, mouseY);
   stopButton.mousePressed(mouseX, mouseY);
   muteToggleButton.mousePressed(mouseX, mouseY);
+  nextButton.mousePressed(mouseX, mouseY);
+  prevButton.mousePressed(mouseX, mouseY);
+  nextPatternButton.mousePressed(mouseX, mouseY);
+  prevPatternButton.mousePressed(mouseX, mouseY);
 }
 
 void mouseReleased() {
@@ -150,10 +176,14 @@ void mouseReleased() {
   startButton.mouseReleased(mouseX, mouseY);
   stopButton.mouseReleased(mouseX, mouseY);
   muteToggleButton.mouseReleased(mouseX, mouseY);
+  nextButton.mouseReleased(mouseX, mouseY);
+  prevButton.mouseReleased(mouseX, mouseY);
+  nextPatternButton.mouseReleased(mouseX, mouseY);
+  prevPatternButton.mouseReleased(mouseX, mouseY);
+
 }
 
 void onButtonEvent(String name, int mx, int my, boolean isPressed) {
-
   if(name == "Start") {
     permutator.startSeq();
   } else if(name == "Stop") {
@@ -166,6 +196,16 @@ void onButtonEvent(String name, int mx, int my, boolean isPressed) {
       permutator.unmute();
     }
     
+  } else if(name == "→" && isPressed) {
+    permutator.next();
+  } else if(name == "←" && isPressed) {
+    permutator.previous();
+  } else if(name == "Next" && isPressed) {
+    currentPattern = (currentPattern+1)%patterns.length;
+    permutator.setFrequences(patterns[currentPattern]);
+  } else if(name == "Previous" && isPressed) {
+    currentPattern = (currentPattern-1+patterns.length)%patterns.length;
+    permutator.setFrequences(patterns[currentPattern]);
   }
   
 }

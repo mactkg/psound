@@ -25,6 +25,10 @@ class Sequence extends Thread {
     converter = sn;
   }
   
+  void setFrequences(float[] f) {
+    freqs = f;
+  }
+  
   void start() {
     println("start thread");
     super.start();
