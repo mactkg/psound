@@ -17,4 +17,22 @@ class Permutator {
     seq.setSn(permutations.get(current));
     current = (current+1)%permutations.size();
   }
+ 
+  void drawSequence(int x, int y, float[] array) {
+    pushMatrix();
+    
+    for(int i = 0; i < array.size(); i++) {
+      
+    }
+    
+    popMatrix();
+  }
+  
+  void getHeight() {
+    
+  }
+  
+  void getWidth() {
+    
+  }
 }
