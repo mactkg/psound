@@ -2,6 +2,7 @@ import promidi.*;
 import ddf.minim.*;
 import ddf.minim.ugens.*;
 
+// sound base class
 class Sound {
   Minim       minim;
   AudioOutput out;

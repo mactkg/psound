@@ -1,8 +1,10 @@
+// sound
 Minim minim;
 AcidBass sound;
-Permutator permutator;
 Sequence seq;
 
+// Permutations!
+Permutator permutator;
 ArrayList<Sn> permutations;
 Sn base;
 Sn circulate;
@@ -10,10 +12,12 @@ Sn switchBack;
 Sn halfSwitch;
 Sn quarterSwitch;
 
+// params to controll sounds
 int current = 0;
 int currentPattern = 0;
 boolean willChange = false;
 
+// UI
 Knob moogFreqKnob;
 Knob moogRezKnob;
 Knob bpmKnob;
@@ -27,6 +31,7 @@ Button nextPatternButton;
 Button prevPatternButton;
 ToggleButton muteToggleButton;
 
+// patterns(in Hz)
 float[][] patterns = {
   {193.7, 261.6, 329.6, 349.2, 392.0, 440.0, 493.9, 523.3},
   {55, 220, 82.4, 0, 110, 55, 82.4, 0},
@@ -112,8 +117,11 @@ void setup() {
 }
 
 void draw() {    
+  // update sound params
   sound.setMoogFrequency(moogFreqKnob.value);
   sound.setMoogResonance(moogRezKnob.value);
+  
+  // update permutator params
   permutator.setBPM(bpmKnob.value);
   if(!muteToggleButton.value) {
     permutator.setAmplitude(volumeKnob.value);
@@ -131,6 +139,7 @@ void draw() {
   moogFreqKnob.draw(550, 430, 80);
   moogRezKnob.draw(700, 430, 80);
   
+  // sound pattern area
   textSize(18);
   text("Change Sound Pattern", 510, 700);
   prevPatternButton.draw();
@@ -139,7 +148,9 @@ void draw() {
   // left side
   prevButton.draw();
   nextButton.draw();
+  
   translate(0, 40);
+  
   permutator.draw(50, 250, 400, 200);
   startButton.draw();
   stopButton.draw();
